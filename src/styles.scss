@@ -1,0 +1,192 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// ==============================
+// Google Fonts - Sora
+// ==============================
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
+
+// ==============================
+// Base Styles
+// ==============================
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: linear-gradient(180deg, $color-dark-bg 0%, $color-darker-bg 100%);
+    color: $color-text-primary;
+    min-height: 100vh;
+    overflow-x: hidden;
+    @include custom-scrollbar;
+  }
+
+  // Light mode overrides
+  .light body,
+  body.light {
+    background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #1e293b;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    @include focus-ring;
+  }
+
+  button {
+    cursor: pointer;
+    font-family: inherit;
+    @include focus-ring;
+  }
+
+  input, textarea, select {
+    font-family: inherit;
+    @include focus-ring;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// ==============================
+// Component Layer
+// ==============================
+@layer components {
+  // Glass card utility
+  .glass-card {
+    @include glass-card;
+  }
+
+  // Glass card with hover effect
+  .glass-card-hover {
+    @include glass-card;
+    transition: $transition-base;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+  }
+
+  // Glass navbar utility
+  .glass-navbar {
+    @include glass-navbar;
+  }
+
+  // Container utility
+  .cc-container {
+    @include container;
+  }
+
+  // Primary button
+  .btn-primary {
+    @apply bg-primary text-white font-semibold px-6 py-3 rounded-full;
+    @apply hover:bg-primary-600 active:bg-primary-700;
+    @apply transition-all duration-300 ease-in-out;
+    @apply shadow-lg hover:shadow-glass-lg;
+    @include touch-target;
+  }
+
+  // Secondary button (gold outline)
+  .btn-secondary {
+    @apply border-2 border-accent text-accent font-semibold px-6 py-3 rounded-full;
+    @apply hover:bg-accent hover:text-dark-deeper;
+    @apply transition-all duration-300 ease-in-out;
+    @include touch-target;
+  }
+
+  // Ghost button
+  .btn-ghost {
+    @apply text-neutral-300 font-medium px-4 py-2 rounded-full;
+    @apply hover:bg-white/10 hover:text-white;
+    @apply transition-all duration-300 ease-in-out;
+    @include touch-target;
+  }
+
+  // Input field
+  .cc-input {
+    @apply w-full bg-white/5 border border-white/20 rounded-xl px-4 py-3;
+    @apply text-white placeholder-neutral-500;
+    @apply focus:border-primary focus:ring-2 focus:ring-primary/30 focus:outline-none;
+    @apply transition-all duration-300;
+  }
+
+  // Light mode input
+  .light .cc-input {
+    @apply bg-white/80 border-gray-300 text-gray-900 placeholder-gray-400;
+    @apply focus:border-primary focus:ring-primary/30;
+  }
+
+  // Badge
+  .cc-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .cc-badge-primary {
+    @apply cc-badge bg-primary/20 text-primary-200;
+  }
+
+  .cc-badge-accent {
+    @apply cc-badge bg-accent/20 text-accent;
+  }
+
+  .cc-badge-success {
+    @apply cc-badge bg-green-500/20 text-green-400;
+  }
+
+  .cc-badge-danger {
+    @apply cc-badge bg-red-500/20 text-red-400;
+  }
+
+  // Section title
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-center mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-neutral-400 text-center text-lg max-w-2xl mx-auto mb-12;
+  }
+
+  // Skeleton loading
+  .skeleton {
+    @apply animate-pulse bg-white/10 rounded-xl;
+  }
+}
+
+// ==============================
+// Utility Layer
+// ==============================
+@layer utilities {
+  // Text gradient utility
+  .text-gradient-primary {
+    @include text-gradient;
+  }
+
+  // Hide scrollbar utility
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
