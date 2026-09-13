@@ -1,41 +1,85 @@
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
-@Injectable({ providedIn: 'root' })
+export interface SeoConfig {
+  title: string;
+  description: string;
+  url?: string;
+  image?: string;
+  noIndex?: boolean;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
 export class SeoService {
   private readonly meta = inject(Meta);
   private readonly title = inject(Title);
 
-  updateMeta(config: {
-    title: string;
-    description: string;
-    url?: string;
-    image?: string;
-    noIndex?: boolean;
-  }): void {
-    const fullTitle = `${config.title} | CineCrew`;
-    this.title.setTitle(fullTitle);
+  updateMeta(config: SeoConfig): void {
+    const pageTitle = config.title.trim();
 
-    this.meta.updateTag({ name: 'description', content: config.description });
+    this.title.setTitle(pageTitle);
 
-    // Open Graph
-    this.meta.updateTag({ property: 'og:title', content: fullTitle });
-    this.meta.updateTag({ property: 'og:description', content: config.description });
-    this.meta.updateTag({ property: 'og:type', content: 'website' });
-    if (config.url) this.meta.updateTag({ property: 'og:url', content: config.url });
-    if (config.image) this.meta.updateTag({ property: 'og:image', content: config.image });
+    this.meta.updateTag({
+      name: 'description',
+      content: config.description,
+    });
 
-    // Twitter Card
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-    this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
-    this.meta.updateTag({ name: 'twitter:description', content: config.description });
-    if (config.image) this.meta.updateTag({ name: 'twitter:image', content: config.image });
+    this.meta.updateTag({
+      property: 'og:title',
+      content: pageTitle,
+    });
 
-    // Robots
-    if (config.noIndex) {
-      this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
-    } else {
-      this.meta.updateTag({ name: 'robots', content: 'index, follow' });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: config.description,
+    });
+
+    this.meta.updateTag({
+      property: 'og:type',
+      content: 'website',
+    });
+
+    if (config.url) {
+      this.meta.updateTag({
+        property: 'og:url',
+        content: config.url,
+      });
     }
+
+    if (config.image) {
+      this.meta.updateTag({
+        property: 'og:image',
+        content: config.image,
+      });
+    }
+
+    this.meta.updateTag({
+      name: 'twitter:card',
+      content: 'summary_large_image',
+    });
+
+    this.meta.updateTag({
+      name: 'twitter:title',
+      content: pageTitle,
+    });
+
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: config.description,
+    });
+
+    if (config.image) {
+      this.meta.updateTag({
+        name: 'twitter:image',
+        content: config.image,
+      });
+    }
+
+    this.meta.updateTag({
+      name: 'robots',
+      content: config.noIndex ? 'noindex, nofollow' : 'index, follow',
+    });
   }
 }

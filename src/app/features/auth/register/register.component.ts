@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   ReactiveFormsModule,
-  Validators,
-  AbstractControl,
   ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,144 +14,597 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   template: `
-    <div
-      class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] via-[#0f0f1a] to-[#1a1a2e] px-4 py-12"
+    <main
+      class="register-page min-h-screen bg-[var(--cc-bg-base)] px-5 py-8 text-[var(--cc-text-primary)] sm:px-8"
     >
-      <div
-        class="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-2xl"
-      >
-        <div class="text-center mb-8">
-          <h1 class="text-3xl font-bold text-white mb-2">Crie sua conta</h1>
-          <p class="text-neutral-400">Junte-se ao CineCrew hoje mesmo</p>
-        </div>
-
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
-          <div>
-            <label for="name" class="block text-sm font-medium text-neutral-300 mb-1">Nome</label>
-            <input
-              id="name"
-              type="text"
-              formControlName="name"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#2B4393] focus:border-transparent transition-all"
-              placeholder="Seu nome"
-            />
-            @if (registerForm.get('name')?.touched && registerForm.get('name')?.invalid) {
-              <p class="mt-1 text-sm text-red-400">Nome é obrigatório.</p>
-            }
-          </div>
-
-          <div>
-            <label for="email" class="block text-sm font-medium text-neutral-300 mb-1">Email</label>
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#2B4393] focus:border-transparent transition-all"
-              placeholder="seu@email.com"
-            />
-            @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
-              <p class="mt-1 text-sm text-red-400">Email válido é obrigatório.</p>
-            }
-          </div>
-
-          <div>
-            <label for="password" class="block text-sm font-medium text-neutral-300 mb-1"
-              >Senha</label
-            >
-            <input
-              id="password"
-              type="password"
-              formControlName="password"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#2B4393] focus:border-transparent transition-all"
-              placeholder="Min. 8 caracteres"
-            />
-            @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
-              <p class="mt-1 text-sm text-red-400">Senha deve ter no mínimo 8 caracteres.</p>
-            }
-          </div>
-
-          <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-neutral-300 mb-1"
-              >Confirmar Senha</label
-            >
-            <input
-              id="confirmPassword"
-              type="password"
-              formControlName="confirmPassword"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#2B4393] focus:border-transparent transition-all"
-              placeholder="Confirme sua senha"
-            />
-            @if (
-              registerForm.get('confirmPassword')?.touched &&
-              registerForm.errors?.['passwordMismatch']
-            ) {
-              <p class="mt-1 text-sm text-red-400">As senhas não coincidem.</p>
-            }
-          </div>
-
-          <button
-            type="submit"
-            [disabled]="registerForm.invalid || isLoading()"
-            class="w-full bg-[#2B4393] hover:bg-[#3d5ac2] disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl px-4 py-3 font-semibold transition-colors flex items-center justify-center mt-2"
+      <div class="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl flex-col">
+        <header class="flex items-center justify-between">
+          <a
+            routerLink="/"
+            class="group inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC250] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--cc-bg-base)]"
+            aria-label="CineCrew - Página inicial"
           >
-            @if (isLoading()) {
-              <div
-                class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"
-              ></div>
-            } @else {
-              Criar conta
-            }
-          </button>
-        </form>
+            <img src="cine-crew-logo.svg" alt="CineCrew" class="h-9 w-auto object-contain" />
+          </a>
 
-        <p class="mt-6 text-center text-sm text-neutral-400">
-          Já tem conta?
-          <a routerLink="/login" class="text-[#FFC250] hover:underline font-medium">Entre</a>
-        </p>
+          <p class="text-xs text-[var(--cc-text-muted)] sm:text-sm">
+            Já tem uma conta?
+            <a
+              routerLink="/login"
+              class="ml-1 font-semibold text-[var(--cc-text-primary)] underline decoration-[var(--cc-text-subtle)] underline-offset-4 transition-colors hover:text-[#FFC250]"
+            >
+              Entrar
+            </a>
+          </p>
+        </header>
+
+        <section class="mx-auto flex w-full max-w-[500px] flex-1 flex-col justify-center py-12">
+          <div class="text-center">
+            <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#FFC250]">
+              Comece seu próximo rolê
+            </span>
+
+            <h1
+              class="mt-3 font-sora text-3xl font-semibold tracking-[-0.04em] text-[var(--cc-text-primary)] sm:text-4xl"
+            >
+              Crie sua conta CineCrew
+            </h1>
+
+            <p class="mt-3 text-sm leading-6 text-[var(--cc-text-muted)]">
+              Complete seu cadastro passo a passo e reúna sua crew.
+            </p>
+          </div>
+
+          <div class="mt-10">
+            <div class="flex items-center justify-between">
+              @for (step of steps; track step.number; let index = $index) {
+                <div class="flex items-center" [class.flex-1]="index < steps.length - 1">
+                  <div class="flex flex-col items-center gap-2">
+                    <div
+                      class="step-indicator"
+                      [class.step-indicator-active]="currentStep() >= step.number"
+                      [class.step-indicator-current]="currentStep() === step.number"
+                    >
+                      @if (currentStep() > step.number) {
+                        <span>✓</span>
+                      } @else {
+                        <span>{{ step.number }}</span>
+                      }
+                    </div>
+
+                    <span
+                      class="hidden text-[10px] font-medium sm:block"
+                      [class.text-[#FFC250]]="currentStep() === step.number"
+                      [class.text-[var(--cc-text-muted)]]="currentStep() !== step.number"
+                    >
+                      {{ step.label }}
+                    </span>
+                  </div>
+
+                  @if (index < steps.length - 1) {
+                    <div
+                      class="step-line"
+                      [class.step-line-active]="currentStep() > step.number"
+                    ></div>
+                  }
+                </div>
+              }
+            </div>
+
+            <p class="mt-4 text-center text-xs text-[var(--cc-text-muted)] sm:hidden">
+              Etapa {{ currentStep() }} de {{ steps.length }} ·
+              {{ steps[currentStep() - 1].label }}
+            </p>
+          </div>
+
+          <div
+            class="mt-8 rounded-2xl border border-[var(--cc-border-default)] bg-[var(--cc-bg-elevated)] p-5 shadow-[var(--cc-shadow-card)] backdrop-blur-2xl sm:p-7"
+          >
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              @if (currentStep() === 1) {
+                <div class="step-content">
+                  <div class="mb-6">
+                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#FFC250]">
+                      Etapa 1
+                    </p>
+
+                    <h2 class="mt-2 font-sora text-xl font-semibold text-[var(--cc-text-primary)]">
+                      Como podemos chamar você?
+                    </h2>
+
+                    <p class="mt-2 text-sm leading-6 text-[var(--cc-text-muted)]">
+                      Use o nome pelo qual sua crew conhece você.
+                    </p>
+                  </div>
+
+                  <label
+                    for="name"
+                    class="mb-2 block text-sm font-medium text-[var(--cc-text-secondary)]"
+                  >
+                    Seu nome
+                  </label>
+
+                  <input
+                    id="name"
+                    type="text"
+                    formControlName="name"
+                    autocomplete="name"
+                    class="register-input"
+                    placeholder="Ex.: Ana Lima"
+                    autofocus
+                  />
+
+                  @if (isFieldInvalid('name')) {
+                    <p class="form-error">Nome é obrigatório.</p>
+                  }
+
+                  <button
+                    type="button"
+                    class="primary-button mt-6"
+                    [disabled]="registerForm.get('name')?.invalid"
+                    (click)="nextStep()"
+                  >
+                    Continuar
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </div>
+              }
+
+              @if (currentStep() === 2) {
+                <div class="step-content">
+                  <div class="mb-6">
+                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#FFC250]">
+                      Etapa 2
+                    </p>
+
+                    <h2 class="mt-2 font-sora text-xl font-semibold text-[var(--cc-text-primary)]">
+                      Onde podemos encontrar você?
+                    </h2>
+
+                    <p class="mt-2 text-sm leading-6 text-[var(--cc-text-muted)]">
+                      Seu e-mail será usado para acessar sua conta.
+                    </p>
+                  </div>
+
+                  <label
+                    for="email"
+                    class="mb-2 block text-sm font-medium text-[var(--cc-text-secondary)]"
+                  >
+                    Seu e-mail
+                  </label>
+
+                  <input
+                    id="email"
+                    type="email"
+                    formControlName="email"
+                    autocomplete="email"
+                    class="register-input"
+                    placeholder="seu@email.com"
+                    autofocus
+                  />
+
+                  @if (isFieldInvalid('email')) {
+                    <p class="form-error">Informe um e-mail válido.</p>
+                  }
+
+                  <div class="mt-6 grid grid-cols-2 gap-3">
+                    <button type="button" class="secondary-button" (click)="previousStep()">
+                      Voltar
+                    </button>
+
+                    <button
+                      type="button"
+                      class="primary-button"
+                      [disabled]="registerForm.get('email')?.invalid"
+                      (click)="nextStep()"
+                    >
+                      Continuar
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  </div>
+                </div>
+              }
+
+              @if (currentStep() === 3) {
+                <div class="step-content">
+                  <div class="mb-6">
+                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#FFC250]">
+                      Etapa 3
+                    </p>
+
+                    <h2 class="mt-2 font-sora text-xl font-semibold text-[var(--cc-text-primary)]">
+                      Proteja sua conta
+                    </h2>
+
+                    <p class="mt-2 text-sm leading-6 text-[var(--cc-text-muted)]">
+                      Crie uma senha com pelo menos 8 caracteres.
+                    </p>
+                  </div>
+
+                  <label
+                    for="password"
+                    class="mb-2 block text-sm font-medium text-[var(--cc-text-secondary)]"
+                  >
+                    Senha
+                  </label>
+
+                  <input
+                    id="password"
+                    type="password"
+                    formControlName="password"
+                    autocomplete="new-password"
+                    class="register-input"
+                    placeholder="Mínimo de 8 caracteres"
+                    autofocus
+                  />
+
+                  @if (isFieldInvalid('password')) {
+                    <p class="form-error">A senha deve ter no mínimo 8 caracteres.</p>
+                  }
+
+                  <label
+                    for="confirmPassword"
+                    class="mb-2 mt-4 block text-sm font-medium text-[var(--cc-text-secondary)]"
+                  >
+                    Confirmar senha
+                  </label>
+
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    formControlName="confirmPassword"
+                    autocomplete="new-password"
+                    class="register-input"
+                    placeholder="Digite a senha novamente"
+                  />
+
+                  @if (isPasswordMismatch()) {
+                    <p class="form-error">As senhas não coincidem.</p>
+                  }
+
+                  <div class="mt-6 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      class="secondary-button"
+                      [disabled]="isLoading()"
+                      (click)="previousStep()"
+                    >
+                      Voltar
+                    </button>
+
+                    <button
+                      type="submit"
+                      class="primary-button"
+                      [disabled]="registerForm.invalid || isLoading()"
+                    >
+                      @if (isLoading()) {
+                        <span class="loading-spinner"></span>
+                        Criando...
+                      } @else {
+                        Criar conta
+                      }
+                    </button>
+                  </div>
+                </div>
+              }
+            </form>
+          </div>
+
+          <p class="mt-6 text-center text-xs leading-5 text-[var(--cc-text-muted)]">
+            Ao criar sua conta, você poderá organizar clubes, sessões, pagamentos e memórias com sua
+            crew.
+          </p>
+        </section>
+
+        <footer class="text-center text-xs text-[var(--cc-text-subtle)]">
+          © {{ currentYear }} CineCrew
+        </footer>
       </div>
-    </div>
+    </main>
+  `,
+  styles: `
+    :host {
+      display: block;
+    }
+
+    .register-page {
+      min-height: 100vh;
+    }
+
+    .step-indicator {
+      display: flex;
+      width: 1.75rem;
+      height: 1.75rem;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--cc-border-default);
+      border-radius: 9999px;
+      color: var(--cc-text-muted);
+      background: var(--cc-bg-elevated);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      transition:
+        border-color 250ms ease,
+        color 250ms ease,
+        background-color 250ms ease,
+        box-shadow 250ms ease;
+    }
+
+    .step-indicator-active {
+      border-color: #2b4393;
+      color: var(--cc-text-primary);
+      background: rgba(43, 67, 147, 0.16);
+    }
+
+    .step-indicator-current {
+      border-color: #ffc250;
+      color: #111827;
+      background: #ffc250;
+      box-shadow: 0 0 18px rgba(255, 194, 80, 0.22);
+    }
+
+    .step-line {
+      height: 1px;
+      flex: 1;
+      margin: 0 0.45rem 1.25rem;
+      background: var(--cc-border-subtle);
+      transition: background-color 250ms ease;
+    }
+
+    .step-line-active {
+      background: #2b4393;
+    }
+
+    .register-input {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--cc-border-default);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--cc-text-primary);
+      background: var(--cc-bg-soft);
+      outline: none;
+      transition:
+        border-color 200ms ease,
+        box-shadow 200ms ease,
+        background-color 200ms ease;
+    }
+
+    .register-input::placeholder {
+      color: var(--cc-text-subtle);
+    }
+
+    .register-input:focus {
+      border-color: #2b4393;
+      box-shadow: 0 0 0 3px rgba(43, 67, 147, 0.2);
+    }
+
+    .form-error {
+      margin-top: 0.4rem;
+      color: #f87171;
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+    }
+
+    .primary-button,
+    .secondary-button {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        color 200ms ease,
+        opacity 200ms ease,
+        transform 200ms ease;
+    }
+
+    .primary-button {
+      width: 100%;
+      color: #111827;
+      background: #ffc250;
+    }
+
+    .primary-button:hover:not(:disabled) {
+      background: #ffd477;
+      transform: translateY(-1px);
+    }
+
+    .primary-button:disabled,
+    .secondary-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .secondary-button {
+      border: 1px solid var(--cc-border-default);
+      color: var(--cc-text-secondary);
+      background: var(--cc-bg-soft);
+    }
+
+    .secondary-button:hover:not(:disabled) {
+      border-color: var(--cc-border-strong);
+      color: var(--cc-text-primary);
+      background: var(--cc-bg-elevated);
+    }
+
+    .loading-spinner {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(17, 24, 39, 0.25);
+      border-top-color: #111827;
+      border-radius: 9999px;
+      animation: register-spin 700ms linear infinite;
+    }
+
+    .step-content {
+      animation: register-step-in 250ms ease-out;
+    }
+
+    @keyframes register-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes register-step-in {
+      from {
+        opacity: 0;
+        transform: translateX(0.5rem);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .step-indicator,
+      .step-line,
+      .register-input,
+      .primary-button,
+      .secondary-button,
+      .step-content,
+      .loading-spinner {
+        animation: none;
+        transition: none;
+      }
+    }
   `,
 })
 export class RegisterComponent {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  isLoading = signal(false);
+  readonly currentYear = new Date().getFullYear();
+  readonly currentStep = signal(1);
+  readonly isLoading = signal(false);
 
-  registerForm = this.fb.group(
+  readonly steps = [
+    { number: 1, label: 'Seu nome' },
+    { number: 2, label: 'Seu e-mail' },
+    { number: 3, label: 'Sua senha' },
+  ];
+
+  readonly registerForm = this.fb.group(
     {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
     },
-    { validators: this.passwordMatchValidator },
+    {
+      validators: this.passwordMatchValidator,
+    },
   );
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
-  onSubmit() {
-    if (this.registerForm.valid) {
-      this.isLoading.set(true);
-      const { name, email, password } = this.registerForm.value;
+  nextStep(): void {
+    const step = this.currentStep();
 
-      this.authService.register({ name: name!, email: email!, password: password! }).subscribe({
+    if (!this.isCurrentStepValid()) {
+      this.markCurrentStepAsTouched();
+      return;
+    }
+
+    if (step < this.steps.length) {
+      this.currentStep.set(step + 1);
+    }
+  }
+
+  previousStep(): void {
+    if (this.currentStep() > 1) {
+      this.currentStep.update((step) => step - 1);
+    }
+  }
+
+  onSubmit(): void {
+    if (this.registerForm.invalid || this.isLoading()) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    const { name, email, password } = this.registerForm.getRawValue();
+
+    this.authService
+      .register({
+        name: name ?? '',
+        email: email ?? '',
+        password: password ?? '',
+      })
+      .subscribe({
         next: () => {
           this.router.navigate(['/clubs']);
         },
-        error: (err) => {
-          console.error(err);
+        error: (error) => {
+          console.error('Erro ao criar conta:', error);
           this.isLoading.set(false);
         },
         complete: () => {
           this.isLoading.set(false);
         },
       });
-    }
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const control = this.registerForm.get(fieldName);
+
+    return Boolean(control?.touched && control.invalid);
+  }
+
+  isPasswordMismatch(): boolean {
+    const confirmPassword = this.registerForm.get('confirmPassword');
+
+    return Boolean(confirmPassword?.touched && this.registerForm.errors?.['passwordMismatch']);
+  }
+
+  private isCurrentStepValid(): boolean {
+    const controlsByStep: Record<number, string[]> = {
+      1: ['name'],
+      2: ['email'],
+      3: ['password', 'confirmPassword'],
+    };
+
+    const fields = controlsByStep[this.currentStep()];
+
+    return fields.every((fieldName) => {
+      const control = this.registerForm.get(fieldName);
+      return Boolean(control?.valid);
+    });
+  }
+
+  private markCurrentStepAsTouched(): void {
+    const controlsByStep: Record<number, string[]> = {
+      1: ['name'],
+      2: ['email'],
+      3: ['password', 'confirmPassword'],
+    };
+
+    const fields = controlsByStep[this.currentStep()];
+
+    fields.forEach((fieldName) => {
+      this.registerForm.get(fieldName)?.markAsTouched();
+    });
   }
 }

@@ -6,7 +6,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
-    title: 'CineCrew — Your Crew, Your Screen',
+    title: 'CineCrew — Your Crew. Your Screen',
   },
   {
     path: 'login',
@@ -29,6 +29,22 @@ export const routes: Routes = [
         (m) => m.OAuth2RedirectComponent,
       ),
     title: 'Autenticando... | CineCrew',
+  },
+  {
+    path: 'clubes',
+    loadComponent: () =>
+      import('./features/showcase/clubs-overview/clubs-overview.component').then(
+        (m) => m.ClubsOverviewComponent,
+      ),
+    title: 'Clubes | CineCrew',
+  },
+  {
+    path: 'recursos',
+    loadComponent: () =>
+      import('./features/showcase/features-overview/features-overview.component').then(
+        (m) => m.FeaturesOverviewComponent,
+      ),
+    title: 'Recursos | CineCrew',
   },
   {
     path: 'clubs',
@@ -80,6 +96,13 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
     title: 'Buscar Filmes | CineCrew',
+  },
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./features/profile/profile.component').then((m) => m.ProfileComponent),
+    canActivate: [authGuard],
+    title: 'Meu perfil | CineCrew',
   },
   {
     path: '**',

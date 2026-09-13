@@ -1,29 +1,35 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-hamburger-menu',
   standalone: true,
-  imports: [CommonModule],
   template: `
-    <button 
-      (click)="onClick()"
-      class="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors focus:outline-none"
-      aria-label="Menu">
-      <div class="flex flex-col gap-1.5 w-6">
-        <span class="block h-0.5 bg-neutral-100 rounded-full transition-all duration-300 ease-in-out" [class.rotate-45]="isOpen" [class.translate-y-2]="isOpen"></span>
-        <span class="block h-0.5 bg-neutral-100 rounded-full transition-all duration-300 ease-in-out" [class.opacity-0]="isOpen"></span>
-        <span class="block h-0.5 bg-neutral-100 rounded-full transition-all duration-300 ease-in-out" [class.-rotate-45]="isOpen" [class.-translate-y-2]="isOpen"></span>
-      </div>
+    <button
+      type="button"
+      class="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.14] bg-white/[0.06] text-white shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-all duration-300 hover:border-[#FFC250]/50 hover:bg-white/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC250] dark:text-white light:border-slate-900/10 light:bg-white/60 light:text-slate-800"
+      [attr.aria-label]="isOpen ? 'Fechar menu' : 'Abrir menu'"
+      [attr.aria-expanded]="isOpen"
+      (click)="toggle.emit()"
+    >
+      <svg
+        class="h-5 w-5 transition-transform duration-300"
+        [class.rotate-90]="isOpen"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        aria-hidden="true"
+      >
+        @if (isOpen) {
+          <path d="M6 6l12 12M18 6 6 18"></path>
+        } @else {
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        }
+      </svg>
     </button>
   `,
-  styles: [``]
 })
 export class HamburgerMenuComponent {
-  @Input() isOpen = false;
-  @Output() toggle = new EventEmitter<void>();
-
-  onClick() {
-    this.toggle.emit();
-  }
+  @Input({ required: true }) isOpen = false;
+  @Output() readonly toggle = new EventEmitter<void>();
 }

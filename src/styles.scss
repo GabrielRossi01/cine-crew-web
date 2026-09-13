@@ -5,14 +5,54 @@
 @tailwind components;
 @tailwind utilities;
 
-// ==============================
-// Google Fonts - Sora
-// ==============================
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
 
-// ==============================
-// Base Styles
-// ==============================
+:root {
+  --cc-bg-base: #0a0a0a;
+  --cc-bg-surface: #111111;
+  --cc-bg-card: #15131f;
+  --cc-bg-elevated: rgba(255, 255, 255, 0.045);
+  --cc-bg-soft: rgba(255, 255, 255, 0.035);
+  --cc-bg-header: rgba(10, 10, 10, 0.95);
+
+  --cc-text-primary: #ffffff;
+  --cc-text-secondary: #d4d4d8;
+  --cc-text-muted: #737373;
+  --cc-text-subtle: #525252;
+
+  --cc-border-subtle: rgba(255, 255, 255, 0.08);
+  --cc-border-default: rgba(255, 255, 255, 0.14);
+  --cc-border-strong: rgba(255, 255, 255, 0.2);
+
+  --cc-icon-primary: #9fb1ff;
+
+  --cc-shadow-card: 0 20px 60px rgba(0, 0, 0, 0.4);
+  --cc-shadow-section: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+html.light {
+  --cc-bg-base: #f8fafc;
+  --cc-bg-surface: #ffffff;
+  --cc-bg-card: #ffffff;
+  --cc-bg-elevated: rgba(15, 23, 42, 0.045);
+  --cc-bg-soft: rgba(15, 23, 42, 0.035);
+  --cc-bg-header: rgba(248, 250, 252, 0.94);
+
+  --cc-text-primary: #0f172a;
+  --cc-text-secondary: #334155;
+  --cc-text-muted: #64748b;
+  --cc-text-subtle: #94a3b8;
+
+  --cc-border-subtle: rgba(15, 23, 42, 0.08);
+  --cc-border-default: rgba(15, 23, 42, 0.14);
+  --cc-border-strong: rgba(15, 23, 42, 0.2);
+
+  --cc-icon-primary: #2b4393;
+
+  --cc-shadow-card: 0 20px 60px rgba(15, 23, 42, 0.1);
+  --cc-shadow-section: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
 @layer base {
   *,
   *::before,
@@ -37,8 +77,7 @@
     @include custom-scrollbar;
   }
 
-  // Light mode overrides
-  .light body,
+  html.light body,
   body.light {
     background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
     color: #1e293b;
@@ -56,7 +95,9 @@
     @include focus-ring;
   }
 
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     font-family: inherit;
     @include focus-ring;
   }
@@ -67,16 +108,11 @@
   }
 }
 
-// ==============================
-// Component Layer
-// ==============================
 @layer components {
-  // Glass card utility
   .glass-card {
     @include glass-card;
   }
 
-  // Glass card with hover effect
   .glass-card-hover {
     @include glass-card;
     transition: $transition-base;
@@ -87,17 +123,14 @@
     }
   }
 
-  // Glass navbar utility
   .glass-navbar {
     @include glass-navbar;
   }
 
-  // Container utility
   .cc-container {
     @include container;
   }
 
-  // Primary button
   .btn-primary {
     @apply bg-primary text-white font-semibold px-6 py-3 rounded-full;
     @apply hover:bg-primary-600 active:bg-primary-700;
@@ -106,7 +139,6 @@
     @include touch-target;
   }
 
-  // Secondary button (gold outline)
   .btn-secondary {
     @apply border-2 border-accent text-accent font-semibold px-6 py-3 rounded-full;
     @apply hover:bg-accent hover:text-dark-deeper;
@@ -114,7 +146,6 @@
     @include touch-target;
   }
 
-  // Ghost button
   .btn-ghost {
     @apply text-neutral-300 font-medium px-4 py-2 rounded-full;
     @apply hover:bg-white/10 hover:text-white;
@@ -122,7 +153,6 @@
     @include touch-target;
   }
 
-  // Input field
   .cc-input {
     @apply w-full bg-white/5 border border-white/20 rounded-xl px-4 py-3;
     @apply text-white placeholder-neutral-500;
@@ -130,13 +160,11 @@
     @apply transition-all duration-300;
   }
 
-  // Light mode input
   .light .cc-input {
     @apply bg-white/80 border-gray-300 text-gray-900 placeholder-gray-400;
     @apply focus:border-primary focus:ring-primary/30;
   }
 
-  // Badge
   .cc-badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
   }
@@ -157,7 +185,6 @@
     @apply cc-badge bg-red-500/20 text-red-400;
   }
 
-  // Section title
   .section-title {
     @apply text-3xl md:text-4xl font-bold text-center mb-4;
   }
@@ -166,22 +193,52 @@
     @apply text-neutral-400 text-center text-lg max-w-2xl mx-auto mb-12;
   }
 
-  // Skeleton loading
   .skeleton {
     @apply animate-pulse bg-white/10 rounded-xl;
   }
+
+  .cc-nav-link {
+    @apply inline-flex min-h-[38px] items-center justify-center rounded-full px-4 text-sm font-medium text-neutral-400;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:bg-white/[0.09] hover:text-white;
+  }
+
+  .light .cc-nav-link {
+    @apply text-slate-500 hover:bg-slate-900/[0.07] hover:text-slate-950;
+  }
+
+  .cc-nav-link-active {
+    @apply bg-white/[0.12] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_4px_14px_rgba(0,0,0,0.18)];
+  }
+
+  .light .cc-nav-link-active {
+    @apply bg-white text-slate-950 shadow-[0_4px_14px_rgba(15,23,42,0.1)];
+  }
+
+  .cc-mobile-nav-link {
+    @apply flex min-h-[48px] items-center gap-3 rounded-xl px-3 text-sm font-medium text-neutral-300;
+    @apply transition-all duration-300;
+    @apply hover:bg-white/[0.09] hover:text-white;
+  }
+
+  .light .cc-mobile-nav-link {
+    @apply text-slate-600 hover:bg-slate-900/[0.06] hover:text-slate-950;
+  }
+
+  .cc-mobile-nav-link-active {
+    @apply bg-white/[0.12] text-white;
+  }
+
+  .light .cc-mobile-nav-link-active {
+    @apply bg-slate-900/[0.08] text-slate-950;
+  }
 }
 
-// ==============================
-// Utility Layer
-// ==============================
 @layer utilities {
-  // Text gradient utility
   .text-gradient-primary {
     @include text-gradient;
   }
 
-  // Hide scrollbar utility
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

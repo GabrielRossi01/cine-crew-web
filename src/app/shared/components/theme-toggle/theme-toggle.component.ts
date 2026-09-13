@@ -1,30 +1,44 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-theme-toggle',
   standalone: true,
-  imports: [CommonModule],
   template: `
-    <button 
-      (click)="toggle()" 
-      class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all duration-300 text-neutral-100"
-      aria-label="Toggle theme"
-      title="Toggle theme">
+    <button
+      type="button"
+      class="group flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.14] bg-white/[0.06] text-[#FFC250] shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-[#FFC250]/50 hover:bg-white/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC250] dark:text-[#FFC250] light:border-slate-900/10 light:bg-white/60 light:text-[#2B4393]"
+      [attr.aria-label]="themeService.isDark() ? 'Ativar tema claro' : 'Ativar tema escuro'"
+      [attr.title]="themeService.isDark() ? 'Ativar tema claro' : 'Ativar tema escuro'"
+      (click)="themeService.toggleTheme()"
+    >
       @if (themeService.isDark()) {
-        <span class="text-xl">🌙</span>
+        <svg
+          class="h-5 w-5 transition-transform duration-500 group-hover:rotate-45"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="3.5"></circle>
+          <path d="M12 2v2.2M12 19.8V22M4.93 4.93l1.56 1.56M17.51 17.51l1.56 1.56M2 12h2.2M19.8 12H22M4.93 19.07l1.56-1.56M17.51 6.49l1.56-1.56"></path>
+        </svg>
       } @else {
-        <span class="text-xl">☀️</span>
+        <svg
+          class="h-5 w-5 transition-transform duration-500 group-hover:-rotate-12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+        >
+          <path d="M20.6 15.4A8.8 8.8 0 0 1 8.6 3.4 8.8 8.8 0 1 0 20.6 15.4Z"></path>
+        </svg>
       }
     </button>
   `,
-  styles: [``]
 })
 export class ThemeToggleComponent {
-  themeService = inject(ThemeService);
-
-  toggle() {
-    this.themeService.toggleTheme();
-  }
+  readonly themeService = inject(ThemeService);
 }

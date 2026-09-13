@@ -1,26 +1,74 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+
+const THEME_STORAGE_KEY = 'cinecrew-theme';
 
 export type Theme = 'dark' | 'light';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class ThemeService {
-  private readonly _theme = signal<Theme>(this.getStoredTheme());
-  readonly theme = this._theme.asReadonly();
-  readonly isDark = () => this._theme() === 'dark';
+  readonly theme = signal<Theme>(this.resolveInitialTheme());
 
   constructor() {
-    effect(() => {
-      const theme = this._theme();
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-      localStorage.setItem('cc_theme', theme);
-    });
+    this.applyTheme(this.theme());
   }
 
   toggleTheme(): void {
-    this._theme.update((t) => (t === 'dark' ? 'light' : 'dark'));
+    this.setTheme(this.theme() === 'dark' ? 'light' : 'dark');
   }
 
-  private getStoredTheme(): Theme {
-    return (localStorage.getItem('cc_theme') as Theme) || 'dark';
+  toggle(): void {
+    this.toggleTheme();
+  }
+
+  setTheme(theme: Theme): void {
+    this.theme.set(theme);
+    this.applyTheme(theme);
+    this.persistTheme(theme);
+  }
+
+  isDark(): boolean {
+    return this.theme() === 'dark';
+  }
+
+  isLight(): boolean {
+    return this.theme() === 'light';
+  }
+
+  private applyTheme(theme: Theme): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    const isLight = theme === 'light';
+
+    document.documentElement.classList.toggle('light', isLight);
+    document.body?.classList.toggle('light', isLight);
+    document.documentElement.style.colorScheme = theme;
+  }
+
+  private persistTheme(theme: Theme): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }
+
+  private resolveInitialTheme(): Theme {
+    if (typeof window === 'undefined') {
+      return 'dark';
+    }
+
+    const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+    if (storedTheme === 'dark' || storedTheme === 'light') {
+      return storedTheme;
+    }
+
+    const prefersLight = window.matchMedia?.('(prefers-color-scheme: light)').matches;
+
+    return prefersLight ? 'light' : 'dark';
   }
 }

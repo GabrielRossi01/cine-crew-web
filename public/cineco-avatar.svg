@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Cineco, assistente virtual do CineCrew</title>
+  <desc id="desc">Raposa cartoon amarela usando óculos de cinema 3D.</desc>
+
+  <g stroke="#18284F" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Orelhas e cabeça -->
+    <path fill="#F6A832" d="M151 193C130 162 132 105 151 69c47 20 82 53 103 88 18-7 37-10 58-10s40 3 58 10c21-35 56-68 103-88 19 36 21 93 0 124l-21 28c-7 68-66 140-140 151-10 2-20 3-30 3s-20-1-30-3c-74-11-133-83-140-151z"/>
+    <path fill="#FFB43B" d="M151 69c31 15 60 41 80 76-16 8-31 18-45 31-18-31-32-67-35-107z"/>
+    <path fill="#FFB43B" d="M361 145c20-35 49-61 80-76-3 40-17 76-35 107-14-13-29-23-45-31z"/>
+
+    <!-- Óculos 3D -->
+    <path fill="#F8FAFC" d="M174 168h164c14 0 25 11 25 25v30c0 14-11 25-25 25h-55c-13 0-22-7-26-19l-5-15c-4-12-21-12-25 0l-5 15c-4 12-13 19-26 19h-55c-14 0-25-11-25-25v-30c0-14 11-25 25-25z"/>
+    <path fill="#3159A6" d="M178 183h51c10 0 17 9 14 19l-7 25c-2 7-8 11-15 11h-45c-8 0-15-7-15-15v-25c0-8 7-15 17-15z"/>
+    <path fill="#F7B83E" d="M334 183h-51c-10 0-17 9-14 19l7 25c2 7 8 11 15 11h45c8 0 15-7 15-15v-25c0-8-7-15-17-15z"/>
+    <path fill="none" d="M250 183h12"/>
+    <path fill="none" stroke="#FFFFFF" stroke-opacity=".45" stroke-width="8" d="M185 193l-11 21M207 188l-14 28M326 193l-11 21M348 188l-14 28"/>
+
+    <!-- Laterais do rosto -->
+    <path fill="#FFB83F" d="M155 239c-12 31-26 57-50 76l23 13-17 13 42 29c25 44 65 72 115 79 50-7 90-35 115-79l42-29-17-13 23-13c-24-19-38-45-50-76-28 18-67 29-113 29s-85-11-113-29z"/>
+
+    <!-- Focinho -->
+    <path fill="#FFF1D5" stroke="none" d="M151 328c28-26 61-35 105-4 44-31 77-22 105 4-9 47-52 81-105 88-53-7-96-41-105-88z"/>
+
+    <!-- Olhos -->
+    <ellipse fill="#18284F" stroke="none" cx="219" cy="285" rx="17" ry="25"/>
+    <ellipse fill="#18284F" stroke="none" cx="293" cy="285" rx="17" ry="25"/>
+    <ellipse fill="#FFFFFF" stroke="none" cx="224" cy="277" rx="5" ry="8"/>
+    <ellipse fill="#FFFFFF" stroke="none" cx="298" cy="277" rx="5" ry="8"/>
+
+    <!-- Sobrancelhas -->
+    <path fill="none" d="M195 250c14-9 28-10 42-4M275 246c14-6 28-5 42 4"/>
+
+    <!-- Nariz e sorriso -->
+    <path fill="#18284F" d="M241 335c0-9 7-16 15-16s15 7 15 16c0 10-15 18-15 18s-15-8-15-18z"/>
+    <path fill="none" d="M256 353c-2 22-20 31-42 31M256 353c2 22 20 31 42 31"/>
+    <path fill="none" d="M224 398c20 12 44 12 64 0"/>
+  </g>
+</svg>
