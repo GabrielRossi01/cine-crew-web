@@ -126,7 +126,6 @@ import { UserProfile } from '../../core/models/user-profile.model';
                   <label for="username" class="form-label"> Username </label>
 
                   <div class="relative">
-                    <span class="username-prefix">@</span>
 
                     <input
                       id="username"

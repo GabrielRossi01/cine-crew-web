@@ -350,15 +350,6 @@ import {
               >
                 Recursos
               </a>
-
-              <a
-                routerLink="/"
-                fragment="faq"
-                class="mobile-link"
-                (click)="scrollToSection($event, 'faq')"
-              >
-                Perguntas Frequentes
-              </a>
             </div>
 
             <div class="mt-4 border-t border-[var(--cc-border-subtle)] pt-4">

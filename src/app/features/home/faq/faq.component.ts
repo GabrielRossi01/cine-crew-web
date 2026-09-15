@@ -11,10 +11,6 @@ import { ChevronDown, LucideAngularModule } from 'lucide-angular';
       class="relative scroll-mt-24 overflow-hidden bg-[var(--cc-bg-base)] px-5 py-20 text-[var(--cc-text-primary)] sm:px-8 sm:py-24 lg:px-12"
       aria-labelledby="faq-title"
     >
-      <div
-        class="pointer-events-none absolute -left-40 bottom-0 h-64 w-64 rounded-full bg-[#FFC250]/[0.04] blur-[120px]"
-        aria-hidden="true"
-      ></div>
 
       <div
         class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--cc-border-subtle)] to-transparent"

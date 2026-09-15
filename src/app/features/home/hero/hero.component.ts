@@ -27,7 +27,6 @@ import {
       <div
         class="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-16 px-5 pb-20 pt-36 sm:px-8 sm:pt-40 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 lg:px-12"
       >
-        <!-- Conteúdo -->
         <div class="max-w-xl">
           <div
             class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FFC250]"
@@ -44,11 +43,9 @@ import {
             <span class="hero-gradient-text"> com a sua crew.</span>
           </h1>
 
-          <p
-            class="mt-6 max-w-lg text-sm leading-7 text-[var(--cc-text-muted)] sm:text-base"
-          >
-            Organize a ida ao cinema, divida os ingressos e guarde as melhores
-            memórias em um só lugar.
+          <p class="mt-6 max-w-lg text-sm leading-7 text-[var(--cc-text-muted)] sm:text-base">
+            Organize a ida ao cinema, divida os ingressos e guarde as melhores memórias em um só
+            lugar.
           </p>
 
           <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
@@ -66,9 +63,7 @@ import {
               ></lucide-icon>
             </a>
 
-            <span class="text-xs text-[var(--cc-text-muted)]">
-              Grátis para começar
-            </span>
+            <span class="text-xs text-[var(--cc-text-muted)]"> Grátis para começar </span>
           </div>
 
           <div class="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-xs text-[var(--cc-text-muted)]">
@@ -89,14 +84,12 @@ import {
           </div>
         </div>
 
-        <!-- Ilustração funcional -->
         <div class="relative mx-auto w-full max-w-[560px]">
           <div class="feature-illustration">
             <div class="illustration-orbit illustration-orbit-one"></div>
             <div class="illustration-orbit illustration-orbit-two"></div>
             <div class="illustration-orbit illustration-orbit-three"></div>
 
-            <!-- Filme central -->
             <div class="movie-node">
               <div class="movie-node-icon">
                 <lucide-icon [img]="Clapperboard" [size]="28"></lucide-icon>
@@ -109,25 +102,21 @@ import {
               </div>
             </div>
 
-            <!-- Participante 1 -->
             <div class="person-node person-node-one">
               <div class="person-avatar person-avatar-blue">A</div>
               <span>Ana confirmou</span>
             </div>
 
-            <!-- Participante 2 -->
             <div class="person-node person-node-two">
               <div class="person-avatar person-avatar-yellow">P</div>
               <span>Pedro entrou</span>
             </div>
 
-            <!-- Participante 3 -->
             <div class="person-node person-node-three">
               <div class="person-avatar person-avatar-purple">J</div>
               <span>Julia postou</span>
             </div>
 
-            <!-- Card de pagamento -->
             <div class="floating-card payment-card">
               <div class="floating-icon floating-icon-yellow">
                 <lucide-icon [img]="CircleDollarSign" [size]="17"></lucide-icon>
@@ -151,7 +140,6 @@ import {
               </div>
             </div>
 
-            <!-- Card de ranking -->
             <div class="floating-card ranking-card">
               <div class="floating-icon floating-icon-purple">
                 <lucide-icon [img]="Trophy" [size]="17"></lucide-icon>
@@ -166,22 +154,15 @@ import {
         </div>
       </div>
 
-      <!-- Indicadores inferiores -->
-      <div
-        class="border-t border-[var(--cc-border-subtle)] px-5 py-5 sm:px-8 lg:px-12"
-      >
-        <div
-          class="mx-auto grid max-w-7xl gap-4 sm:grid-cols-3 sm:gap-8"
-        >
+      <div class="border-t border-[var(--cc-border-subtle)] px-5 py-5 sm:px-8 lg:px-12">
+        <div class="mx-auto grid max-w-7xl gap-4 sm:grid-cols-3 sm:gap-8">
           <div class="flex items-center gap-3">
             <div class="hero-bottom-icon">
               <lucide-icon [img]="Users" [size]="17"></lucide-icon>
             </div>
 
             <div>
-              <h2 class="text-xs font-semibold text-[var(--cc-text-primary)]">
-                Reúna sua turma
-              </h2>
+              <h2 class="text-xs font-semibold text-[var(--cc-text-primary)]">Reúna sua turma</h2>
 
               <p class="mt-0.5 text-[11px] text-[var(--cc-text-muted)]">
                 Um clube privado para seus amigos.
@@ -195,9 +176,7 @@ import {
             </div>
 
             <div>
-              <h2 class="text-xs font-semibold text-[var(--cc-text-primary)]">
-                Planeje o rolê
-              </h2>
+              <h2 class="text-xs font-semibold text-[var(--cc-text-primary)]">Planeje o rolê</h2>
 
               <p class="mt-0.5 text-[11px] text-[var(--cc-text-muted)]">
                 Sessões, ingressos e pagamentos.
@@ -211,9 +190,7 @@ import {
             </div>
 
             <div>
-              <h2 class="text-xs font-semibold text-[var(--cc-text-primary)]">
-                Guarde o momento
-              </h2>
+              <h2 class="text-xs font-semibold text-[var(--cc-text-primary)]">Guarde o momento</h2>
 
               <p class="mt-0.5 text-[11px] text-[var(--cc-text-muted)]">
                 Fotos e memórias de cada sessão.
@@ -230,12 +207,7 @@ import {
     }
 
     .hero-gradient-text {
-      background: linear-gradient(
-        105deg,
-        var(--cc-text-primary) 8%,
-        #9fb1ff 48%,
-        #ffc250 94%
-      );
+      background: linear-gradient(105deg, var(--cc-text-primary) 8%, #9fb1ff 48%, #ffc250 94%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -245,20 +217,6 @@ import {
       position: relative;
       min-height: 490px;
       isolation: isolate;
-    }
-
-    .feature-illustration::before {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 18rem;
-      height: 18rem;
-      border-radius: 9999px;
-      background: rgba(43, 67, 147, 0.12);
-      content: '';
-      filter: blur(70px);
-      transform: translate(-50%, -50%);
-      z-index: -2;
     }
 
     .illustration-orbit {

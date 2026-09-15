@@ -34,14 +34,10 @@ import { SeoService } from '../../../core/services/seo.service';
 
     <main class="bg-[var(--cc-bg-base)] text-[var(--cc-text-primary)]">
       <section class="relative overflow-hidden px-5 pb-16 pt-32 sm:px-8 sm:pt-40 lg:px-12">
-        <div
-          class="pointer-events-none absolute left-1/2 top-16 h-80 w-80 -translate-x-1/2 rounded-full bg-[#2B4393]/15 blur-[140px]"
-          aria-hidden="true"
-        ></div>
 
         <div class="relative mx-auto max-w-3xl text-center">
           <span
-            class="inline-flex items-center gap-2 rounded-full border border-[#FFC250]/25 bg-[#FFC250]/[0.06] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FFC250]"
+            class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FFC250]"
           >
             Recursos CineCrew
           </span>
@@ -113,11 +109,6 @@ import { SeoService } from '../../../core/services/seo.service';
                     >
                       {{ item.description }}
                     </p>
-
-                    <div class="feature-highlight">
-                      <span class="feature-highlight-dot"></span>
-                      CineCrew para sua crew
-                    </div>
                   </div>
                 </article>
               }

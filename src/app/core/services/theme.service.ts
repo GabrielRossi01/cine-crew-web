@@ -41,11 +41,18 @@ export class ThemeService {
       return;
     }
 
+    const root = document.documentElement;
+    const body = document.body;
     const isLight = theme === 'light';
 
-    document.documentElement.classList.toggle('light', isLight);
-    document.body?.classList.toggle('light', isLight);
-    document.documentElement.style.colorScheme = theme;
+    root.classList.toggle('light', isLight);
+    root.classList.toggle('dark', !isLight);
+
+    body?.classList.toggle('light', isLight);
+    body?.classList.toggle('dark', !isLight);
+
+    root.setAttribute('data-theme', theme);
+    root.style.colorScheme = theme;
   }
 
   private persistTheme(theme: Theme): void {

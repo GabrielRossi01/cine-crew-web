@@ -38,7 +38,7 @@ export class ClubService {
     return this.http.post<InviteResponse>(`${this.apiUrl}/clubs/${clubId}/invite`, {});
   }
 
-  joinClub(inviteCode: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/clubs/join/${inviteCode}`, {});
+  joinClub(inviteCode: string): Observable<ClubResponse> {
+    return this.http.post<ClubResponse>(`${this.apiUrl}/clubs/join`, { inviteCode });
   }
 }

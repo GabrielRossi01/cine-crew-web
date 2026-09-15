@@ -1,8 +1,18 @@
 import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
@@ -171,11 +181,11 @@ export class MovieSearchComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly searchSubject = new Subject<string>();
 
-  results = signal<MovieSearchResult[]>([]);
-  loading = signal(false);
-  hasSearched = signal(false);
-  watchlistSet = signal<Set<number>>(new Set());
-  addingTmdbId = signal<number | null>(null);
+  readonly results = signal<MovieSearchResult[]>([]);
+  readonly loading = signal(false);
+  readonly hasSearched = signal(false);
+  readonly watchlistSet = signal<Set<number>>(new Set());
+  readonly addingTmdbId = signal<number | null>(null);
 
   ngOnInit(): void {
     this.seoService.updateMeta({
@@ -183,17 +193,59 @@ export class MovieSearchComponent implements OnInit, OnDestroy {
       description: 'Pesquise filmes e adicione à sua lista de desejos no CineCrew',
     });
 
+    this.loadWatchlist();
+
     this.searchSubject
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe((query) => {
-        const trimmed = query.trim();
-        if (trimmed.length > 2) {
-          this.performSearch(trimmed);
-        } else {
-          this.results.set([]);
-          this.hasSearched.set(false);
-          this.loading.set(false);
-        }
+      .pipe(
+        debounceTime(300),
+        map((query) => query.trim()),
+        distinctUntilChanged(),
+        tap((query) => {
+          if (query.length <= 2) {
+            this.results.set([]);
+            this.hasSearched.set(false);
+            this.loading.set(false);
+          }
+        }),
+        filter((query) => query.length > 2),
+        tap(() => {
+          this.loading.set(true);
+          this.hasSearched.set(true);
+        }),
+        switchMap((query) =>
+          this.movieService.searchMovies(query, 1).pipe(
+            catchError(() => {
+              this.toastService.error('Erro ao buscar filmes. Tente novamente.');
+
+              return of([] as MovieSearchResult[]);
+            }),
+          ),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((results) => {
+        this.results.set(results);
+        this.loading.set(false);
+      });
+  }
+
+  private loadWatchlist(): void {
+    this.watchlistService
+      .getMyWatchlist(0, 100)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (page) => {
+          const tmdbIds = new Set(
+            page.content
+              .map((item) => item.movie.tmdbId)
+              .filter((tmdbId): tmdbId is number => tmdbId != null),
+          );
+
+          this.watchlistSet.set(tmdbIds);
+        },
+        error: () => {
+          this.watchlistSet.set(new Set());
+        },
       });
   }
 
@@ -207,26 +259,6 @@ export class MovieSearchComponent implements OnInit, OnDestroy {
     this.searchSubject.next(val);
   }
 
-  performSearch(query: string): void {
-    this.loading.set(true);
-    this.hasSearched.set(true);
-
-    this.movieService
-      .searchMovies(query, 1)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          this.results.set(res || []);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.results.set([]);
-          this.loading.set(false);
-          this.toastService.error('Erro ao buscar filmes. Tente novamente.');
-        },
-      });
-  }
-
   addToWatchlist(tmdbId: number): void {
     if (this.watchlistSet().has(tmdbId) || this.addingTmdbId() === tmdbId) {
       return;
@@ -236,19 +268,36 @@ export class MovieSearchComponent implements OnInit, OnDestroy {
 
     this.movieService
       .importMovie(tmdbId)
-      .pipe(switchMap((movie) => this.watchlistService.addToWatchlist(movie.id)))
+      .pipe(
+        switchMap((movie) => this.watchlistService.addToWatchlist(movie.id)),
+        takeUntil(this.destroy$),
+      )
       .subscribe({
         next: () => {
           this.watchlistSet.update((set) => {
-            const newSet = new Set(set);
-            newSet.add(tmdbId);
-            return newSet;
+            const updated = new Set(set);
+            updated.add(tmdbId);
+            return updated;
           });
+
           this.addingTmdbId.set(null);
           this.toastService.success('Filme adicionado à sua lista!');
         },
-        error: () => {
+        error: (error) => {
           this.addingTmdbId.set(null);
+
+          if (error.status === 409) {
+            this.watchlistSet.update((set) => {
+              const updated = new Set(set);
+              updated.add(tmdbId);
+              return updated;
+            });
+
+            this.toastService.error('Este filme já está na sua lista.');
+
+            return;
+          }
+
           this.toastService.error('Erro ao adicionar filme à lista.');
         },
       });

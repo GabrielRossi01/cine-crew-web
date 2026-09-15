@@ -7,7 +7,6 @@ import {
   LucideAngularModule,
   ShieldCheck,
   Users,
-  Gift,
 } from 'lucide-angular';
 
 @Component({
@@ -19,11 +18,6 @@ import {
       class="relative overflow-hidden bg-[var(--cc-bg-base)] px-5 py-12 text-[var(--cc-text-primary)] sm:px-8 sm:py-14 lg:px-12"
       aria-labelledby="free-plan-title"
     >
-      <div
-        class="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#2B4393]/10 blur-[110px]"
-        aria-hidden="true"
-      ></div>
-
       <div class="relative mx-auto max-w-7xl">
         <div
           class="free-plan-card grid gap-7 rounded-2xl p-6 sm:p-7 lg:grid-cols-[0.9fr_1.4fr_auto] lg:items-center lg:gap-10"
@@ -118,26 +112,39 @@ import {
     }
 
     .free-plan-card {
-      border: 1px solid var(--cc-border-strong);
-      background: var(--cc-bg-card);
+      position: relative;
+      isolation: isolate;
+      border: 1px solid var(--free-plan-glass-border);
+      background: var(--free-plan-glass-surface);
+      background-clip: padding-box;
       box-shadow:
-        inset 0 1px 0 var(--cc-border-subtle),
-        var(--cc-shadow-card);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+        inset 0 1px 0 var(--free-plan-glass-highlight),
+        0 18px 42px var(--free-plan-glass-shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transform: translateZ(0);
+      transition:
+        border-color 250ms ease,
+        background 250ms ease,
+        box-shadow 250ms ease;
     }
 
-    .plan-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 22px;
-      border: 1px solid var(--cc-border-subtle);
-      border-radius: 9999px;
-      padding: 0 0.6rem;
-      color: var(--cc-text-muted);
-      background: var(--cc-bg-soft);
-      font-size: 0.625rem;
-      font-weight: 700;
+    .free-plan-card::after {
+      position: absolute;
+      inset: 1px;
+      z-index: -1;
+      border: 1px solid var(--free-plan-glass-inner-border);
+      border-radius: inherit;
+      content: '';
+      pointer-events: none;
+    }
+
+    .free-plan-card:hover {
+      border-color: var(--free-plan-glass-hover-border);
+      background: var(--free-plan-glass-hover-surface);
+      box-shadow:
+        inset 0 1px 0 var(--free-plan-glass-hover-highlight),
+        0 24px 52px var(--free-plan-glass-hover-shadow);
     }
 
     .check-icon {
@@ -149,14 +156,65 @@ import {
       justify-content: center;
       margin-top: 0.1rem;
       border-radius: 9999px;
-      color: #ffc250;
-      background: var(--cc-bg-soft);
+      color: var(--free-plan-check-color);
+    }
+
+    :host-context(.dark) {
+      --free-plan-glass-border: rgba(255, 255, 255, 0.14);
+      --free-plan-glass-inner-border: rgba(255, 255, 255, 0.05);
+      --free-plan-glass-surface: rgba(255, 255, 255, 0.035);
+      --free-plan-glass-highlight: rgba(255, 255, 255, 0.14);
+      --free-plan-glass-shadow: rgba(0, 0, 0, 0.28);
+      --free-plan-glass-hover-border: rgba(255, 194, 80, 0.46);
+      --free-plan-glass-hover-surface: rgba(255, 255, 255, 0.055);
+      --free-plan-glass-hover-highlight: rgba(255, 255, 255, 0.2);
+      --free-plan-glass-hover-shadow: rgba(0, 0, 0, 0.38);
+      --free-plan-check-border: rgba(255, 194, 80, 0.24);
+      --free-plan-check-surface: rgba(255, 194, 80, 0.08);
+      --free-plan-check-color: #ffc250;
+    }
+
+    :host-context(.light),
+    :host-context([data-theme='light']) {
+      --free-plan-glass-border: rgba(20, 31, 58, 0.16);
+      --free-plan-glass-inner-border: rgba(255, 255, 255, 0.72);
+      --free-plan-glass-surface: rgba(255, 255, 255, 0.48);
+      --free-plan-glass-highlight: rgba(255, 255, 255, 0.88);
+      --free-plan-glass-shadow: rgba(34, 48, 78, 0.14);
+      --free-plan-glass-hover-border: rgba(43, 67, 147, 0.4);
+      --free-plan-glass-hover-surface: rgba(255, 255, 255, 0.64);
+      --free-plan-glass-hover-highlight: rgba(255, 255, 255, 0.96);
+      --free-plan-glass-hover-shadow: rgba(34, 48, 78, 0.2);
+      --free-plan-check-border: rgba(43, 67, 147, 0.2);
+      --free-plan-check-surface: rgba(43, 67, 147, 0.08);
+      --free-plan-check-color: #2b4393;
     }
 
     @media (max-width: 640px) {
       .free-plan-card {
         padding: 1.25rem;
       }
+    }
+
+    @supports not (backdrop-filter: blur(1px)) {
+      .free-plan-card {
+        background: var(--free-plan-fallback-surface);
+      }
+
+      .check-icon {
+        background: var(--free-plan-check-fallback-surface);
+      }
+    }
+
+    :host-context(.dark) {
+      --free-plan-fallback-surface: rgba(255, 255, 255, 0.08);
+      --free-plan-check-fallback-surface: rgba(255, 194, 80, 0.1);
+    }
+
+    :host-context(.light),
+    :host-context([data-theme='light']) {
+      --free-plan-fallback-surface: rgba(255, 255, 255, 0.78);
+      --free-plan-check-fallback-surface: rgba(43, 67, 147, 0.1);
     }
   `,
 })

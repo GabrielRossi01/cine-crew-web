@@ -171,12 +171,8 @@ import { ChatService } from '../../../core/services/chat.service';
       height: 4rem;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 194, 80, 0.55);
       border-radius: 9999px;
       background: var(--cc-bg-card, #15131f);
-      box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.28),
-        0 0 24px rgba(255, 194, 80, 0.28);
       cursor: pointer;
       isolation: isolate;
       transition:
@@ -185,33 +181,13 @@ import { ChatService } from '../../../core/services/chat.service';
         border-color 250ms ease;
     }
 
-    .chat-launcher:hover {
-      border-color: rgba(255, 194, 80, 0.85);
-      box-shadow:
-        0 14px 36px rgba(0, 0, 0, 0.34),
-        0 0 32px rgba(255, 194, 80, 0.42);
-      transform: translateY(-3px) scale(1.04);
-    }
-
     .chat-launcher-avatar {
       width: 3.15rem;
       height: 3.15rem;
       object-fit: contain;
       border-radius: 9999px;
     }
-
-    .chat-launcher-status {
-      position: absolute;
-      right: 0.15rem;
-      bottom: 0.2rem;
-      width: 0.75rem;
-      height: 0.75rem;
-      border: 2px solid var(--cc-bg-base, #0a0a0a);
-      border-radius: 9999px;
-      background: #4ade80;
-      box-shadow: 0 0 9px rgba(74, 222, 128, 0.7);
-    }
-
+    
     .chat-window {
       position: fixed;
       right: 1.5rem;

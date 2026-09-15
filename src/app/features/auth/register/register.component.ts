@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -26,16 +27,6 @@ import { AuthService } from '../../../core/services/auth.service';
           >
             <img src="cine-crew-logo.svg" alt="CineCrew" class="h-9 w-auto object-contain" />
           </a>
-
-          <p class="text-xs text-[var(--cc-text-muted)] sm:text-sm">
-            Já tem uma conta?
-            <a
-              routerLink="/login"
-              class="ml-1 font-semibold text-[var(--cc-text-primary)] underline decoration-[var(--cc-text-subtle)] underline-offset-4 transition-colors hover:text-[#FFC250]"
-            >
-              Entrar
-            </a>
-          </p>
         </header>
 
         <section class="mx-auto flex w-full max-w-[500px] flex-1 flex-col justify-center py-12">
@@ -55,47 +46,45 @@ import { AuthService } from '../../../core/services/auth.service';
             </p>
           </div>
 
-          <div class="mt-10">
-            <div class="flex items-center justify-between">
-              @for (step of steps; track step.number; let index = $index) {
-                <div class="flex items-center" [class.flex-1]="index < steps.length - 1">
-                  <div class="flex flex-col items-center gap-2">
-                    <div
-                      class="step-indicator"
-                      [class.step-indicator-active]="currentStep() >= step.number"
-                      [class.step-indicator-current]="currentStep() === step.number"
-                    >
-                      @if (currentStep() > step.number) {
-                        <span>✓</span>
-                      } @else {
-                        <span>{{ step.number }}</span>
-                      }
-                    </div>
-
-                    <span
-                      class="hidden text-[10px] font-medium sm:block"
-                      [class.text-[#FFC250]]="currentStep() === step.number"
-                      [class.text-[var(--cc-text-muted)]]="currentStep() !== step.number"
-                    >
-                      {{ step.label }}
-                    </span>
+          <div class="mt-10 flex items-center justify-between">
+            @for (step of steps; track step.number; let index = $index) {
+              <div class="flex items-center" [class.flex-1]="index < steps.length - 1">
+                <div class="flex flex-col items-center gap-2">
+                  <div
+                    class="step-indicator"
+                    [class.step-indicator-active]="currentStep() >= step.number"
+                    [class.step-indicator-current]="currentStep() === step.number"
+                  >
+                    @if (currentStep() > step.number) {
+                      <span>✓</span>
+                    } @else {
+                      <span>{{ step.number }}</span>
+                    }
                   </div>
 
-                  @if (index < steps.length - 1) {
-                    <div
-                      class="step-line"
-                      [class.step-line-active]="currentStep() > step.number"
-                    ></div>
-                  }
+                  <span
+                    class="hidden text-[10px] font-medium sm:block"
+                    [class.text-[#FFC250]]="currentStep() === step.number"
+                    [class.text-[var(--cc-text-muted)]]="currentStep() !== step.number"
+                  >
+                    {{ step.label }}
+                  </span>
                 </div>
-              }
-            </div>
 
-            <p class="mt-4 text-center text-xs text-[var(--cc-text-muted)] sm:hidden">
-              Etapa {{ currentStep() }} de {{ steps.length }} ·
-              {{ steps[currentStep() - 1].label }}
-            </p>
+                @if (index < steps.length - 1) {
+                  <div
+                    class="step-line"
+                    [class.step-line-active]="currentStep() > step.number"
+                  ></div>
+                }
+              </div>
+            }
           </div>
+
+          <p class="mt-4 text-center text-xs text-[var(--cc-text-muted)] sm:hidden">
+            Etapa {{ currentStep() }} de {{ steps.length }} ·
+            {{ steps[currentStep() - 1].label }}
+          </p>
 
           <div
             class="mt-8 rounded-2xl border border-[var(--cc-border-default)] bg-[var(--cc-bg-elevated)] p-5 shadow-[var(--cc-shadow-card)] backdrop-blur-2xl sm:p-7"
@@ -288,6 +277,12 @@ import { AuthService } from '../../../core/services/auth.service';
                 </div>
               }
             </form>
+
+            <div class="auth-switch">
+              <span> Já tem uma conta? </span>
+
+              <a routerLink="/login" class="auth-switch-link"> Entrar </a>
+            </div>
           </div>
 
           <p class="mt-6 text-center text-xs leading-5 text-[var(--cc-text-muted)]">
@@ -387,6 +382,35 @@ import { AuthService } from '../../../core/services/auth.service';
       line-height: 1.25rem;
     }
 
+    .auth-switch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--cc-border-subtle);
+      color: var(--cc-text-muted);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .auth-switch-link {
+      color: var(--cc-text-primary);
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: var(--cc-border-strong);
+      text-underline-offset: 0.25rem;
+      transition:
+        color 180ms ease,
+        text-decoration-color 180ms ease;
+    }
+
+    .auth-switch-link:hover {
+      color: var(--cc-icon-primary);
+      text-decoration-color: currentColor;
+    }
+
     .primary-button,
     .secondary-button {
       display: inline-flex;
@@ -470,6 +494,7 @@ import { AuthService } from '../../../core/services/auth.service';
       .step-indicator,
       .step-line,
       .register-input,
+      .auth-switch-link,
       .primary-button,
       .secondary-button,
       .step-content,
@@ -590,6 +615,7 @@ export class RegisterComponent {
 
     return fields.every((fieldName) => {
       const control = this.registerForm.get(fieldName);
+
       return Boolean(control?.valid);
     });
   }

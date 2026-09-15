@@ -15,6 +15,7 @@ export interface MovieSearchResult {
 
 export interface MovieSummary {
   id: number;
+  tmdbId: number;
   title: string;
   posterUrl: string | null;
   releaseYear: number | null;

@@ -12,11 +12,6 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
       aria-labelledby="testimonials-title"
     >
       <div
-        class="pointer-events-none absolute left-1/2 top-20 h-80 w-80 -translate-x-1/2 rounded-full bg-[#2B4393]/10 blur-[130px]"
-        aria-hidden="true"
-      ></div>
-
-      <div
         class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--cc-border-subtle)] to-transparent"
         aria-hidden="true"
       ></div>
@@ -57,9 +52,6 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
                 <div
                   class="liquid-card relative flex h-full min-h-[290px] flex-col overflow-hidden rounded-2xl p-7 sm:min-h-[320px] sm:p-9"
                 >
-                  <div class="liquid-glow liquid-glow-blue" aria-hidden="true"></div>
-                  <div class="liquid-glow liquid-glow-green" aria-hidden="true"></div>
-
                   <div class="relative z-10 flex items-start justify-between gap-6">
                     <lucide-icon
                       [img]="Quote"
@@ -88,9 +80,7 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
                   </blockquote>
 
                   <div class="relative z-10 mt-auto flex items-center gap-3 pt-8">
-                    <div
-                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--cc-border-strong)] bg-[var(--cc-bg-elevated)] text-sm font-bold text-[var(--cc-text-primary)] shadow-lg backdrop-blur-xl"
-                    >
+                    <div class="testimonial-avatar">
                       {{ testimonial.initial }}
                     </div>
 
@@ -193,76 +183,60 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
 
     .liquid-card {
       isolation: isolate;
-      border: 1px solid var(--cc-border-default);
-      background: var(--cc-bg-card);
+      border: 1px solid var(--testimonial-glass-border);
+      background: var(--testimonial-glass-surface);
       box-shadow:
-        inset 0 1px 0 var(--cc-border-subtle),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.04),
-        var(--cc-shadow-card);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+        inset 0 1px 0 var(--testimonial-glass-highlight),
+        0 18px 42px var(--testimonial-glass-shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transform: translateZ(0);
+      transition:
+        border-color 250ms ease,
+        background 250ms ease,
+        box-shadow 250ms ease;
     }
 
-    .liquid-card::before {
-      position: absolute;
-      inset: 1px;
-      z-index: -1;
-      border-radius: inherit;
-      background: var(--cc-bg-soft);
-      content: '';
-      pointer-events: none;
+    .liquid-card:hover {
+      border-color: var(--testimonial-glass-hover-border);
+      background: var(--testimonial-glass-hover-surface);
+      box-shadow:
+        inset 0 1px 0 var(--testimonial-glass-hover-highlight),
+        0 24px 52px var(--testimonial-glass-hover-shadow);
     }
 
-    .liquid-card::after {
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      border-radius: inherit;
-      background: transparent;
-      content: '';
-      pointer-events: none;
-    }
-
-    .liquid-glow {
-      position: absolute;
-      z-index: -1;
-      width: 11rem;
-      height: 11rem;
+    .testimonial-avatar {
+      display: flex;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--testimonial-avatar-border);
       border-radius: 9999px;
-      filter: blur(42px);
-      opacity: 0.2;
-      pointer-events: none;
-    }
-
-    .liquid-glow-blue {
-      top: -7rem;
-      right: -4rem;
-      background: rgba(72, 107, 224, 0.4);
-    }
-
-    .liquid-glow-green {
-      bottom: -8rem;
-      left: -5rem;
-      background: rgba(80, 190, 156, 0.25);
+      color: var(--testimonial-avatar-text);
+      background: var(--testimonial-avatar-surface);
+      box-shadow: inset 0 1px 0 var(--testimonial-glass-highlight);
+      font-size: 0.875rem;
+      font-weight: 700;
     }
 
     .carousel-control {
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
       width: 38px;
       height: 38px;
+      align-items: center;
+      justify-content: center;
       border: 1px solid var(--cc-border-subtle);
       border-radius: 9999px;
       color: var(--cc-text-secondary);
       background: var(--cc-bg-elevated);
+      box-shadow: 0 8px 18px var(--testimonial-control-shadow);
       transition:
         background-color 250ms ease,
         border-color 250ms ease,
         color 250ms ease,
         transform 250ms ease;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
     }
 
     .carousel-control:hover {
@@ -270,6 +244,37 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
       color: var(--cc-text-primary);
       background: var(--cc-bg-soft);
       transform: translateY(-1px);
+    }
+
+    :host-context(.dark) {
+      --testimonial-glass-border: rgba(255, 255, 255, 0.14);
+      --testimonial-glass-surface: rgba(255, 255, 255, 0.035);
+      --testimonial-glass-highlight: rgba(255, 255, 255, 0.14);
+      --testimonial-glass-shadow: rgba(0, 0, 0, 0.28);
+      --testimonial-glass-hover-border: rgba(255, 194, 80, 0.46);
+      --testimonial-glass-hover-surface: rgba(255, 255, 255, 0.055);
+      --testimonial-glass-hover-highlight: rgba(255, 255, 255, 0.2);
+      --testimonial-glass-hover-shadow: rgba(0, 0, 0, 0.38);
+      --testimonial-avatar-border: rgba(255, 255, 255, 0.16);
+      --testimonial-avatar-surface: rgba(255, 255, 255, 0.06);
+      --testimonial-avatar-text: var(--cc-text-primary);
+      --testimonial-control-shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    :host-context(.light),
+    :host-context([data-theme='light']) {
+      --testimonial-glass-border: rgba(20, 31, 58, 0.16);
+      --testimonial-glass-surface: rgba(255, 255, 255, 0.48);
+      --testimonial-glass-highlight: rgba(255, 255, 255, 0.86);
+      --testimonial-glass-shadow: rgba(34, 48, 78, 0.14);
+      --testimonial-glass-hover-border: rgba(43, 67, 147, 0.4);
+      --testimonial-glass-hover-surface: rgba(255, 255, 255, 0.64);
+      --testimonial-glass-hover-highlight: rgba(255, 255, 255, 0.96);
+      --testimonial-glass-hover-shadow: rgba(34, 48, 78, 0.2);
+      --testimonial-avatar-border: rgba(43, 67, 147, 0.2);
+      --testimonial-avatar-surface: rgba(43, 67, 147, 0.08);
+      --testimonial-avatar-text: #2b4393;
+      --testimonial-control-shadow: rgba(34, 48, 78, 0.12);
     }
 
     @media (min-width: 768px) {
@@ -289,9 +294,25 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
     @media (prefers-reduced-motion: reduce) {
       .testimonial-track,
       .testimonial-slide,
+      .liquid-card,
       .carousel-control {
         transition: none;
       }
+    }
+
+    @supports not (backdrop-filter: blur(1px)) {
+      .liquid-card {
+        background: var(--testimonial-fallback-surface);
+      }
+    }
+
+    :host-context(.dark) {
+      --testimonial-fallback-surface: rgba(255, 255, 255, 0.08);
+    }
+
+    :host-context(.light),
+    :host-context([data-theme='light']) {
+      --testimonial-fallback-surface: rgba(255, 255, 255, 0.78);
     }
   `,
 })
