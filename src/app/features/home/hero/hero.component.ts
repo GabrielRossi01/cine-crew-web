@@ -28,13 +28,7 @@ import {
         class="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-16 px-5 pb-20 pt-36 sm:px-8 sm:pt-40 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 lg:px-12"
       >
         <div class="max-w-xl">
-          <div
-            class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FFC250]"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-[#FFC250]"></span>
-            Sua crew. Seu cinema.
-          </div>
-
+  
           <h1
             id="hero-title"
             class="mt-5 max-w-xl font-sora text-4xl font-semibold leading-[1.06] tracking-[-0.055em] text-[var(--cc-text-primary)] sm:text-5xl lg:text-6xl"

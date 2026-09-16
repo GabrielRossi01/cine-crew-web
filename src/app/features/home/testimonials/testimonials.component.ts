@@ -30,7 +30,7 @@ import { ArrowLeft, ArrowRight, LucideAngularModule, Quote, Star } from 'lucide-
           </h2>
 
           <p class="mt-3 text-sm leading-6 text-[var(--cc-text-muted)]">
-            Menos organização no grupo. Mais momentos para lembrar.
+            Mais organização no grupo. Mais momentos para lembrar.
           </p>
         </header>
 
@@ -328,7 +328,7 @@ export class TestimonialsComponent implements AfterViewInit, OnDestroy {
     {
       initial: 'A',
       name: 'Ana L.',
-      role: 'Organizadora da crew',
+      role: 'Membro da crew',
       text: 'Agora a turma decide o filme sem perder horas no grupo. Ficou muito mais fácil combinar tudo.',
     },
     {
@@ -340,7 +340,7 @@ export class TestimonialsComponent implements AfterViewInit, OnDestroy {
     {
       initial: 'J',
       name: 'Julia S.',
-      role: 'Memória da crew',
+      role: 'Membro da crew',
       text: 'As fotos de cada sessão viraram o álbum oficial das nossas idas ao cinema.',
     },
   ];

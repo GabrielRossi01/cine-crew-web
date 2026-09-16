@@ -8,6 +8,7 @@ import {
   LoaderCircle,
   LucideAngularModule,
   Save,
+  Upload,
 } from 'lucide-angular';
 
 import { AuthService } from '../../core/services/auth.service';
@@ -77,30 +78,62 @@ import { UserProfile } from '../../core/models/user-profile.model';
                   <h2 class="text-lg font-bold">Foto de perfil</h2>
 
                   <p class="mt-1 text-sm leading-6 text-[var(--cc-text-muted)]">
-                    A foto atual é fornecida pelo cadastro ou pelo login com Google.
+                    Escolha uma imagem para personalizar seu perfil.
                   </p>
 
-                  @if (profile()?.avatarUrl) {
-                    <button
-                      type="button"
-                      class="remove-avatar-button mt-4"
-                      [disabled]="isRemovingAvatar()"
-                      (click)="removeAvatar()"
+                  <div class="mt-4 flex flex-wrap gap-3">
+                    <label
+                      for="avatarFile"
+                      class="upload-avatar-button"
+                      [class.upload-avatar-button-disabled]="isUploadingAvatar()"
                     >
-                      @if (isRemovingAvatar()) {
+                      @if (isUploadingAvatar()) {
                         <lucide-icon
                           [img]="LoaderCircle"
                           [size]="15"
                           strokeWidth="1.8"
                           class="animate-spin"
                         ></lucide-icon>
-                      } @else {
-                        <lucide-icon [img]="ImageOff" [size]="15" strokeWidth="1.8"></lucide-icon>
-                      }
 
-                      Remover foto
-                    </button>
-                  }
+                        Enviando...
+                      } @else {
+                        <lucide-icon [img]="Upload" [size]="15" strokeWidth="1.8"></lucide-icon>
+
+                        Escolher foto
+                      }
+                    </label>
+
+                    <input
+                      id="avatarFile"
+                      type="file"
+                      class="sr-only"
+                      accept="image/jpeg,image/png,image/webp"
+                      [disabled]="isUploadingAvatar()"
+                      (change)="onAvatarSelected($event)"
+                    />
+
+                    @if (profile()?.avatarUrl) {
+                      <button
+                        type="button"
+                        class="remove-avatar-button"
+                        [disabled]="isRemovingAvatar()"
+                        (click)="removeAvatar()"
+                      >
+                        @if (isRemovingAvatar()) {
+                          <lucide-icon
+                            [img]="LoaderCircle"
+                            [size]="15"
+                            strokeWidth="1.8"
+                            class="animate-spin"
+                          ></lucide-icon>
+                        } @else {
+                          <lucide-icon [img]="ImageOff" [size]="15" strokeWidth="1.8"></lucide-icon>
+                        }
+
+                        Remover foto
+                      </button>
+                    }
+                  </div>
                 </div>
               </div>
             </section>
@@ -126,7 +159,6 @@ import { UserProfile } from '../../core/models/user-profile.model';
                   <label for="username" class="form-label"> Username </label>
 
                   <div class="relative">
-
                     <input
                       id="username"
                       name="username"
@@ -343,6 +375,36 @@ import { UserProfile } from '../../core/models/user-profile.model';
       color: #bbf7d0;
       background: rgba(20, 83, 45, 0.18);
     }
+
+    .upload-avatar-button {
+      display: inline-flex;
+      min-height: 2.5rem;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      border-radius: 0.6rem;
+      padding: 0 0.85rem;
+      color: #111827;
+      background: #ffc250;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition:
+        background-color 180ms ease,
+        opacity 180ms ease,
+        transform 180ms ease;
+    }
+
+    .upload-avatar-button:hover {
+      background: #ffd477;
+      transform: translateY(-1px);
+    }
+
+    .upload-avatar-button-disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      pointer-events: none;
+    }
   `,
 })
 export class ProfileComponent {
@@ -351,6 +413,7 @@ export class ProfileComponent {
   readonly ImageOff = ImageOff;
   readonly LoaderCircle = LoaderCircle;
   readonly Save = Save;
+  readonly Upload = Upload;
 
   readonly profile = signal<UserProfile | null>(null);
   readonly isLoading = signal(true);
@@ -358,6 +421,7 @@ export class ProfileComponent {
   readonly isRemovingAvatar = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly successMessage = signal<string | null>(null);
+  readonly isUploadingAvatar = signal(false);
 
   readonly form = {
     name: '',
@@ -435,7 +499,6 @@ export class ProfileComponent {
         }
 
         this.isRemovingAvatar.set(false);
-        this.successMessage.set('Foto de perfil removida.');
       },
       error: (error) => {
         this.isRemovingAvatar.set(false);
@@ -489,5 +552,64 @@ export class ProfileComponent {
     }
 
     return 'Não foi possível concluir a operação. Tente novamente.';
+  }
+
+  onAvatarSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.clearFeedback();
+
+    const validationError = this.validateAvatarFile(file);
+
+    if (validationError) {
+      this.errorMessage.set(validationError);
+      input.value = '';
+      return;
+    }
+
+    this.isUploadingAvatar.set(true);
+
+    this.userService.uploadAvatar(file).subscribe({
+      next: (profile) => {
+        this.profile.set(profile);
+
+        this.authService.setCurrentUser({
+          id: profile.id,
+          name: profile.name,
+          avatarUrl: profile.avatarUrl,
+        });
+
+        this.isUploadingAvatar.set(false);
+
+        input.value = '';
+      },
+      error: (error) => {
+        this.isUploadingAvatar.set(false);
+        this.errorMessage.set(this.getErrorMessage(error));
+
+        input.value = '';
+      },
+    });
+  }
+
+  private validateAvatarFile(file: File): string | null {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    const maxSizeInBytes = 5 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+      return 'Formato inválido. Use JPG, PNG ou WEBP.';
+    }
+
+    if (file.size > maxSizeInBytes) {
+      return 'A imagem deve ter no máximo 5 MB.';
+    }
+
+    return null;
   }
 }

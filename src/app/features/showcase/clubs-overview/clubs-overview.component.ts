@@ -301,7 +301,6 @@ interface ClubJourneyStep {
     }
 
     .section-eyebrow {
-      display: inline-flex;
       align-items: center;
       gap: 0.55rem;
       color: var(--journey-eyebrow);

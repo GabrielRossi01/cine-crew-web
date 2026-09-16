@@ -3,10 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import {
-  UpdateProfileRequest,
-  UserProfile,
-} from '../models/user-profile.model';
+import { UpdateProfileRequest, UserProfile } from '../models/user-profile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,23 +13,22 @@ export class UserService {
   private readonly apiUrl = environment.apiUrl;
 
   getMyProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(
-      `${this.apiUrl}/users/me`,
-    );
+    return this.http.get<UserProfile>(`${this.apiUrl}/users/me`);
   }
 
-  updateMyProfile(
-    request: UpdateProfileRequest,
-  ): Observable<UserProfile> {
-    return this.http.patch<UserProfile>(
-      `${this.apiUrl}/users/me`,
-      request,
-    );
+  updateMyProfile(request: UpdateProfileRequest): Observable<UserProfile> {
+    return this.http.patch<UserProfile>(`${this.apiUrl}/users/me`, request);
+  }
+
+  uploadAvatar(file: File): Observable<UserProfile> {
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    return this.http.post<UserProfile>(`${this.apiUrl}/users/me/avatar`, formData);
   }
 
   removeAvatar(): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/users/me/avatar`,
-    );
+    return this.http.delete<void>(`${this.apiUrl}/users/me/avatar`);
   }
 }
